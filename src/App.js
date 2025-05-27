@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import ProductList from "./ProductList";
 import Content from "./Content";
 import "./App.css";
@@ -14,16 +9,14 @@ function App() {
   const [products, setProducts] = useState([]);
 
   const [count, setCount] = useState(60);
-  const [value, setValue] = useState(0); // 👈 biến đếm sẽ tăng qua Content
+  const [value, setValue] = useState(0);
 
   const timerId = useRef(null);
 
-  // Hàm tăng count dùng cho Content
   const handleIncrease = useCallback(() => {
     setValue((prev) => prev + 1);
   }, []);
 
-  // Bắt đầu timer
   const handleStart = () => {
     if (timerId.current) return;
     timerId.current = setInterval(() => {
@@ -31,7 +24,6 @@ function App() {
     }, 1000);
   };
 
-  // Dừng timer
   const handleStop = () => {
     clearInterval(timerId.current);
     timerId.current = null;

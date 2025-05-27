@@ -1,6 +1,5 @@
 import React from "react";
 
-// React.memo tránh re-render khi props không đổi
 function ProductList({ products, total }) {
   console.log("🔄 Render ProductList");
 
