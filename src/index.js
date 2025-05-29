@@ -6,7 +6,7 @@ import "./index.css"; // Tùy chọn: dùng để định nghĩa CSS toàn cục
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <WrappedApp />
-  </React.StrictMode>
+  //<React.StrictMode>
+  <WrappedApp />
+  //</React.StrictMode>
 );

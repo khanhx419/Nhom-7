@@ -1,90 +1,125 @@
-import React, { useState, useRef, useMemo, useCallback } from "react";
-import ProductList from "./ProductList";
-import Content from "./Content";
+import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import "./App.css";
 
 function App() {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [products, setProducts] = useState([]);
+  console.log("🔁 App re-rendered");
 
-  const [count, setCount] = useState(60);
-  const [value, setValue] = useState(0);
+  // ----------- Counter: setState thường vs callback -----------
+  const [counter, setCounter] = useState(1);
 
-  const timerId = useRef(null);
-
-  const handleIncrease = useCallback(() => {
-    setValue((prev) => prev + 1);
-  }, []);
-
-  const handleStart = () => {
-    if (timerId.current) return;
-    timerId.current = setInterval(() => {
-      setCount((prev) => prev - 1);
-    }, 1000);
+  const handleWithoutCallback = () => {
+    console.log("🚫 Increase without callback");
+    setCounter(counter + 1);
+    setCounter(counter + 1);
+    setCounter(counter + 1);
   };
 
-  const handleStop = () => {
-    clearInterval(timerId.current);
-    timerId.current = null;
+  const handleWithCallback = () => {
+    console.log("✅ Increase with callback");
+    setCounter((prev) => {
+      console.log("↪️ prevState #1:", prev);
+      return prev + 1;
+    });
+    setCounter((prev) => {
+      console.log("↪️ prevState #2:", prev);
+      return prev + 1;
+    });
+    setCounter((prev) => {
+      console.log("↪️ prevState #3:", prev);
+      return prev + 1;
+    });
   };
 
-  const total = useMemo(() => {
-    const result = products.reduce((sum, prod) => {
-      console.log("Tính lại total...");
-      return sum + prod.price;
-    }, 0);
-    return result;
-  }, [products]);
+  // ----------- useEffect vs useLayoutEffect -----------
+  const [effectCounter, setEffectCounter] = useState(0);
+  const [layoutCounter, setLayoutCounter] = useState(0);
 
-  const handleSubmit = () => {
-    setProducts([
-      ...products,
-      {
-        name,
-        price: +price,
-      },
-    ]);
-    setName("");
-    setPrice("");
+  useEffect(() => {
+    if (effectCounter > 3) {
+      setEffectCounter(0);
+    }
+  }, [effectCounter]);
+
+  useLayoutEffect(() => {
+    if (layoutCounter > 3) {
+      setLayoutCounter(0);
+    }
+  }, [layoutCounter]);
+
+  // ----------- So sánh: State vs Ref khi nhập liệu -----------
+  const [stateInput, setStateInput] = useState("");
+  const refInput = useRef("");
+
+  const handleStateInputChange = (e) => {
+    console.log("🔄 Cập nhật state → gây re-render");
+    setStateInput(e.target.value);
+  };
+
+  const handleRefInputChange = (e) => {
+    console.log("🆗 Cập nhật ref → không re-render");
+    refInput.current = e.target.value;
   };
 
   return (
     <div className="app-container">
-      {/* Countdown Timer */}
-      <div className="card">
-        <h2>Countdown Timer</h2>
-        <p>Time left: {count}s</p>
-        <button onClick={handleStart}>Start</button>
-        <button onClick={handleStop} style={{ marginLeft: 10 }}>
-          Stop
+      <h2>🔢 Counter: {counter}</h2>
+      <div className="button-group">
+        <button onClick={handleWithoutCallback}>
+          Increase ❌ (no callback)
+        </button>
+        <button onClick={handleWithCallback}>
+          Increase ✅ (with callback)
         </button>
       </div>
 
-      {/* Product Manager */}
-      <div className="card">
-        <h2>🛒 Product Manager</h2>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Tên sản phẩm"
-        />
-        <input
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          placeholder="Giá"
-          type="number"
-        />
-        <button onClick={handleSubmit}>Add</button>
+      <hr />
 
-        <ProductList products={products} total={total} />
+      <h2>🆚 useEffect vs useLayoutEffect</h2>
+      <div className="counter-section">
+        <div>
+          <h4>🔄 useEffect Counter</h4>
+          <p>Giá trị: {effectCounter}</p>
+          <button onClick={() => setEffectCounter((prev) => prev + 1)}>
+            Tăng (Effect)
+          </button>
+          <p className="note">
+            Sẽ thấy <strong>4</strong> rồi mới reset về 0.
+          </p>
+        </div>
+
+        <div>
+          <h4>⚡ useLayoutEffect Counter</h4>
+          <p>Giá trị: {layoutCounter}</p>
+          <button onClick={() => setLayoutCounter((prev) => prev + 1)}>
+            Tăng (LayoutEffect)
+          </button>
+          <p className="note">
+            Không thấy <strong>4</strong> – reset ngay trước khi hiển thị.
+          </p>
+        </div>
       </div>
 
-      {/* Content Area */}
-      <div className="card">
-        <h2>Content Area</h2>
-        <Content onIncrease={handleIncrease} />
-        <h1>{value}</h1>
+      <hr />
+
+      <h2>🧪useRef khi nhập liệu</h2>
+      <div className="input-section">
+        <div style={{ marginBottom: "1rem" }}>
+          <label>
+            ❌ Dùng state (gây re-render):
+            <input
+              type="text"
+              value={stateInput}
+              onChange={handleStateInputChange}
+            />
+          </label>
+        </div>
+
+        <div>
+          <label>
+            ✅ Dùng ref (không re-render):
+            <input type="text" onChange={handleRefInputChange} />
+          </label>
+        </div>
       </div>
     </div>
   );

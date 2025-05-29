@@ -1,68 +1,48 @@
-/* App.css */
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f4f6f8;
-  margin: 0;
-  padding: 0;
-  color: #333;
-}
-
 .app-container {
-  padding: 40px;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
   max-width: 800px;
   margin: 0 auto;
 }
 
-.card {
-  padding: 24px;
-  margin-bottom: 24px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  /* Bỏ bo viền */
-  border-radius: 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-h2 {
-  margin-top: 0;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  background-color: #fff;
-  /* Bỏ bo viền */
-  border-radius: 0;
-}
-
-button {
-  padding: 10px 20px;
-  margin-top: 10px;
-  margin-right: 10px;
-  background-color: #1976d2;
-  color: white;
-  border: none;
+.button-group button,
+.counter-section button {
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
   cursor: pointer;
-  font-size: 16px;
-  /* Bỏ bo viền */
-  border-radius: 0;
 }
 
-button:hover {
-  background-color: #115293;
+hr {
+  margin: 2rem 0;
 }
 
-.total-text {
-  font-weight: bold;
-  font-size: 18px;
-  margin-top: 10px;
-  color: #222;
+.input-section {
+  margin-top: 1rem;
+}
+
+.input-section input {
+  margin-left: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 300px;
+}
+
+.counter-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.counter-section > div {
+  flex: 1;
+  min-width: 300px;
+}
+
+.note {
+  color: gray;
+  font-style: italic;
+  font-size: 0.9rem;
 }
